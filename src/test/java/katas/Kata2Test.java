@@ -24,7 +24,7 @@ public class Kata2Test {
         List<Movie> movies = DataUtil.getMovies();
 
         var moviesRatingGthanFive = movies.stream().map(ele -> ele.getRating().intValue())
-                .filter(rating -> rating == 5.0).collect(Collectors.toList());
+                .filter(rating -> rating == 5.0).toList();
 
         assertThat(moviesRatingGthanFive.get(0), equalTo(5));
 

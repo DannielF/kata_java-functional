@@ -21,7 +21,7 @@ public class Kata3Test {
 
         var moviesIdOnly = movieLists.stream()
                 .flatMap(movieList -> movieList.getVideos().stream().map(Movie::getId))
-                .collect(Collectors.toList());
+                .toList();
 
         Assert.assertThat(moviesIdOnly.size(), equalTo(4));
     }

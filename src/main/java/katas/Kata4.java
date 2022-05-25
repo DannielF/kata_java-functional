@@ -1,8 +1,5 @@
 package katas;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import model.BoxArt;
 import model.MovieList;
 import util.DataUtil;
 
@@ -15,9 +12,20 @@ import java.util.Map;
     Output: List of ImmutableMap.of("id", "5", "title", "Bad Boys", "boxart": BoxArt)
 */
 public class Kata4 {
-    public static List<Map> execute() {
+
+    private Kata4() {
+    }
+
+    public static List<Map<String, Object>> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
 
-        return ImmutableList.of(ImmutableMap.of("id", 5, "title", "Bad Boys", "boxart", new BoxArt(150, 200, "url")));
+        return movieLists.stream()
+                .flatMap(list -> list.getVideos().stream()
+                        .map(video ->
+                                Map.of("id ", video.getId(),
+                                        "title ", video.getTitle(),
+                                        "boxArt ", video.getBoxarts().stream()
+                                                .filter(ele -> ele.getWidth() == 150).toList())))
+                .toList();
     }
 }

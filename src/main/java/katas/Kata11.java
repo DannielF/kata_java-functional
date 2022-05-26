@@ -1,9 +1,8 @@
 package katas;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import util.DataUtil;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -57,14 +56,33 @@ import java.util.Map;
     Output: the given datastructure
 */
 public class Kata11 {
-    public static List<Map> execute() {
+
+    private Kata11() {
+    }
+
+    public static List<Map<String, Object>> execute() {
         List<Map> lists = DataUtil.getLists();
         List<Map> videos = DataUtil.getVideos();
         List<Map> boxArts = DataUtil.getBoxArts();
         List<Map> bookmarkList = DataUtil.getBookmarkList();
 
-        return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
-                ImmutableMap.of("id", 5, "title", "The Chamber", "time", 123, "boxart", "someUrl")
-        )));
+        return lists.stream()
+                .map(list -> Map.of("name", list.get("name"),
+                        "videos", videos
+                                .stream()
+                                .filter(video -> video.get("listId")
+                                        .equals(list.get("id")))
+                                .map(video -> Map.of("id", video.get("id"), "title", video.get("title"),
+                                        "time", bookmarkList
+                                                .stream()
+                                                .filter(bookM -> bookM.get("videoId")
+                                                        .equals(video.get("id")))
+                                                .map(book -> book.get("time")).toList(),
+                                        "boxArt", boxArts.stream()
+                                                .filter(boxA -> boxA.get("videoId")
+                                                        .equals(video.get("id")))
+                                                .min(Comparator.comparingInt(box -> (int) box.get("width")))))
+                                .toList()))
+                .toList();
     }
 }

@@ -2,17 +2,14 @@ package katas;
 
 import model.BoxArt;
 import model.MovieList;
-import org.junit.Assert;
 import org.junit.Test;
 import util.DataUtil;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
 public class Kata7Test {
@@ -25,9 +22,9 @@ public class Kata7Test {
                 .map(video -> Map.of("id", video.getId(),
                         "title", video.getTitle(),
                         "boxArt", video.getBoxarts().stream()
-                                        .
+                                .filter(boxArt -> boxArt.getWidth() <= 150)
+                                .map(BoxArt::getUrl).toList())).toList();
 
-
-        Assert.assertThat(Kata7.execute(), equalTo(4));
+        assertThat(newList.size(), equalTo(4));
     }
 }
